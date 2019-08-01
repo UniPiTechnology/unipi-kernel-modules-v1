@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get install -y apt-transport-https
-echo 'deb https://repo.unipi.technology/debian testing main' > /etc/apt/sources.list.d/unipi.list
+echo 'deb https://repo.unipi.technology/debian stretch main' > /etc/apt/sources.list.d/unipi.list
 wget https://repo.unipi.technology/debian/unipi_pub.gpg -O - | apt-key add -
 apt-get update
 NEURON_KERNEL=`apt-cache show --no-all-versions neuron-kernel | sed -n 's/^Depends: .*raspberrypi-kernel (= \([^)]*\).*$/\1/p'`
