@@ -71,7 +71,7 @@ build_from_schedule_on_rpi:
         - "apt-get update"
         - "NEURON_KERNEL=`apt-cache show --no-all-versions neuron-kernel | sed -n 's/^Depends: .*raspberrypi-kernel (= \\([^)]*\\).*$/\\1/p'`"
         - "RPI_KERNEL=`apt-cache show --no-all-versions raspberrypi-kernel | sed -n 's/^Version: //p'`"
-        - "echo '${NEURON_KERNEL} ?? ${RPI_KERNEL}'"
+        - "echo ${NEURON_KERNEL} '??' ${RPI_KERNEL}"
     artifacts:
         paths:
             - build/*deb
