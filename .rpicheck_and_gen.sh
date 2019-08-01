@@ -14,7 +14,7 @@ fi
 # create map commit->tag
 git show-ref --tags -d | awk -F "[ /^]" '{printf("s/^%s/(%s)/g\n",$1,$4)}' > commit_and_tags
 # find the last tag from master branch
-TAG=$(git log --branches=test, origin/test \
+TAG=$(git log --branches=master, origin/master \
 		--date="format:%Y%m%d%H%M%S" \
 		--pretty="%H" \
  | sed -f commit_and_tags \
@@ -24,4 +24,4 @@ TAG=$(git log --branches=test, origin/test \
 echo ${TAG}
 rm commit_and_tags
 
-git checkout ${TAG} && /ci-scripts/build-package-for-test.sh
+git checkout ${TAG} && /ci-scripts/build-package-for-master.sh $*

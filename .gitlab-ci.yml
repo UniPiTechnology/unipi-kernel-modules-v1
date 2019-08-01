@@ -65,7 +65,7 @@ build_from_schedule_on_rpi:
     tags:
         - armhf
     script:
-        - bash .rpicheck_and_gen.sh
+        - bash .rpicheck_and_gen.sh unipi-kernel-modules
     artifacts:
         paths:
             - build/*deb
