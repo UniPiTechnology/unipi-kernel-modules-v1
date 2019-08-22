@@ -80,3 +80,21 @@ build-stable-schedule:rpi:
     script:
         - bash .rpicheck_and_gen.sh unipi-kernel-modules
 
+build-oldstable-schedule:nano:
+    extends: .build_for_oldstable
+    tags: ['arm64']
+    only:
+        - triggers
+        - schedules
+    script:
+        - bash .axoncheck_and_gen.sh unipi-kernel-modules
+
+build-oldstable-schedule:rpi:
+    extends: .build_for_oldstable
+    tags: ['armhf']
+    only:
+        - triggers
+        - schedules
+    script:
+        - bash .rpicheck_and_gen.sh unipi-kernel-modules
+
