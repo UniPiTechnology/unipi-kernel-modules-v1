@@ -1,27 +1,40 @@
 #!/bin/bash
 
+# load $DEBIAN_VERSION
+[ -r /ci-script/include.sh ] && . /ci-script/include.sh
+
+REPO="https://repo3.unipi.technology/debian"
+MODULES_PKG=neuron-kernel
+LINUX_KERNEL_PKG=raspberrypi-kernel
+
+## find last generated kernel-module version in UniPi repo
 apt-get install -y apt-transport-https
-echo 'deb https://repo.unipi.technology/debian stretch main' > /etc/apt/sources.list.d/unipi.list
-wget https://repo.unipi.technology/debian/unipi_pub.gpg -O - | apt-key add -
+echo "deb $REPO $DEBIAN_VERSION main" > /etc/apt/sources.list.d/unipi.list
+wget "$REPO/unipi_pub.gpg" -O - | apt-key add -
 apt-get update
-NEURON_KERNEL=`apt-cache show --no-all-versions neuron-kernel | sed -n 's/^Depends: .*raspberrypi-kernel (= \([^)]*\).*$/\1/p'`
-RPI_KERNEL=`apt-cache show --no-all-versions raspberrypi-kernel | sed -n 's/^Version: //p'`
-if [ "${NEURON_KERNEL}" == "${RPI_KERNEL}" ]; then
-    echo "No new Raspbian kernel"
+MODULES_VER=`apt-cache show --no-all-versions $MODULES_PKG | sed -n "s/^Depends: .*$LINUX_KERNEL_PKG (= \([^)]*\).*$/\1/p"`
+LINUX_KERNEL_VER=`apt-cache show --no-all-versions $LINUX_KERNEL_PKG | sed -n 's/^Version: //p'`
+if [ "${MODULES_VER}" == "${LINUX_KERNEL_VER}" ]; then
+    echo "No new Linux kernel"
     exit
 fi
 
 # create map commit->tag
-git show-ref --tags -d | awk -F "[ /^]" '{printf("s/^%s/(%s)/g\n",$1,$4)}' > commit_and_tags
+git show-ref --tags -d \
+  | awk -F "[ /^]" '/\.test\./{next;} {printf("s/^%s/(%s)/g\n",$1,$4)}' \
+  | tac > commit_and_tags
+
+#git show-ref --tags -d | awk -F "[ /^]" '{printf("s/^%s/(%s)/g\n",$1,$4)}' > commit_and_tags
+
 # find the last tag from master branch
 TAG=$(git log --branches=master, origin/master \
-		--date="format:%Y%m%d%H%M%S" \
-		--pretty="%H" \
+        --date="format:%Y%m%d%H%M%S" \
+        --pretty="%H" \
  | sed -f commit_and_tags \
  | sed -n '/^(/p;/^(/q' \
  | sed 's/^(//;s/)$//')
 
 echo ${TAG}
 rm commit_and_tags
-
-git checkout ${TAG} && /ci-scripts/build-package-for-master.sh $*
+## be carefull, this running script can be changed after checkout
+exec /bin/bash -c "git checkout ${TAG} && /ci-scripts/build-package.sh -m $TAG $*"
