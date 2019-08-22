@@ -82,7 +82,7 @@ deploy-release:
 
 build-oldstable-schedule:nano:
     extends: .build_for_oldstable
-    tags: ['amd64']
+    tags: ['arm64']
     only:
         - triggers
         - schedules
