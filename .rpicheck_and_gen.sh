@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # load $DEBIAN_VERSION
-[ -r /ci-script/include.sh ] && . /ci-script/include.sh
+[ -r /ci-scripts/include.sh ] && . /ci-scripts/include.sh
 
 REPO="https://repo3.unipi.technology/debian"
 MODULES_PKG=neuron-kernel
