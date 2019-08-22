@@ -37,4 +37,4 @@ TAG=$(git log --branches=master, origin/master \
 echo ${TAG}
 rm commit_and_tags
 ## be carefull, this running script can be changed after checkout
-exec /bin/bash -c "git checkout ${TAG} && /ci-scripts/build-package.sh -m $TAG $*"
+exec /bin/bash -c "export CI_COMMIT_TAG=$TAG; git checkout ${TAG} && /ci-scripts/build-package.sh -m $*"
