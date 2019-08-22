@@ -19,6 +19,8 @@ if [ "${MODULES_VER}" == "${LINUX_KERNEL_VER}" ]; then
     exit
 fi
 
+apt-get install -y raspberrypi-kernel-headers
+
 # create map commit->tag
 git show-ref --tags -d \
   | awk -F "[ /^]" '/\.test\./{next;} {printf("s/^%s/(%s)/g\n",$1,$4)}' \
