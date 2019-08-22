@@ -4,8 +4,8 @@
 [ -r /ci-scripts/include.sh ] && . /ci-scripts/include.sh
 
 REPO="https://repo3.unipi.technology/debian"
-MODULES_PKG=neuron-kernel
-LINUX_KERNEL_PKG=raspberrypi-kernel
+MODULES_PKG=unipi-kernel-modules
+LINUX_KERNEL_PKG=axon-kernel-image
 
 ## find last generated kernel-module version in UniPi repo
 apt-get install -y apt-transport-https
