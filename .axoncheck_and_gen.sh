@@ -8,7 +8,7 @@ MODULES_PKG=unipi-kernel-modules
 LINUX_KERNEL_PKG=axon-kernel-image
 
 ## find last generated kernel-module version in UniPi repo
-apt-get install -y apt-transport-https dkms
+apt-get install -y apt-transport-https
 echo "deb $REPO $DEBIAN_VERSION main" > /etc/apt/sources.list.d/unipi.list
 wget "$REPO/unipi_pub.gpg" -q -O - | apt-key add -
 apt-get update
