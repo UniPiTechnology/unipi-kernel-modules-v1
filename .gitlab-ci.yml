@@ -98,3 +98,9 @@ build-oldstable-schedule:rpi:
     script:
         - bash .rpicheck_and_gen.sh unipi-kernel-modules
 
+deploy-schedule:
+    extends: .deploy_master
+    only:
+        - triggers
+        - schedules
+
