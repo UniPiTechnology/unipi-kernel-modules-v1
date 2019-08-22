@@ -10,10 +10,11 @@ LINUX_KERNEL_PKG=axon-kernel-image
 ## find last generated kernel-module version in UniPi repo
 apt-get install -y apt-transport-https
 echo "deb $REPO $DEBIAN_VERSION main" > /etc/apt/sources.list.d/unipi.list
-wget "$REPO/unipi_pub.gpg" -O - | apt-key add -
+wget "$REPO/unipi_pub.gpg" -q -O - | apt-key add -
 apt-get update
 MODULES_VER=`apt-cache show --no-all-versions $MODULES_PKG | sed -n "s/^Depends: .*$LINUX_KERNEL_PKG (= \([^)]*\).*$/\1/p"`
 LINUX_KERNEL_VER=`apt-cache show --no-all-versions $LINUX_KERNEL_PKG | sed -n 's/^Version: //p'`
+echo "${MODULES_VER} =?= ${LINUX_KERNEL_VER}"
 if [ "${MODULES_VER}" == "${LINUX_KERNEL_VER}" ]; then
     echo "No new Linux kernel"
     exit
@@ -37,4 +38,4 @@ TAG=$(git log --branches=master, origin/master \
 echo ${TAG}
 rm commit_and_tags
 ## be carefull, this running script can be changed after checkout
-exec /bin/bash -c "git checkout ${TAG} && /ci-scripts/build-package.sh -m $TAG $*"
+exec /bin/bash -c "export CI_COMMIT_TAG=$TAG; git checkout ${TAG} && /ci-scripts/build-package.sh -m $*"
