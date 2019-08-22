@@ -20,7 +20,7 @@ if [ "${MODULES_VER}" == "${LINUX_KERNEL_VER}" ]; then
     exit
 fi
 
-apt-get install -y axon-kernle-headers
+apt-get install -y axon-kernel-headers
 
 # create map commit->tag
 git show-ref --tags -d \
