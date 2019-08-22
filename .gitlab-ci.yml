@@ -70,9 +70,6 @@ build-stable-schedule:nano:
         - schedules
     script:
         - bash .axoncheck_and_gen.sh unipi-kernel-modules
-    before_script: 
-        - apt-get update
-        - apt-get install -y axon-kernel-headers
 
 build-stable-schedule:rpi:
     extends: .build_for_stable
@@ -82,8 +79,4 @@ build-stable-schedule:rpi:
         - schedules
     script:
         - bash .rpicheck_and_gen.sh unipi-kernel-modules
-    before_script: 
-        - apt-get update
-        - apt-get install -y raspberrypi-kernel-headers
-
 
