@@ -3,7 +3,7 @@
 # load $DEBIAN_VERSION
 [ -r /ci-scripts/include.sh ] && . /ci-scripts/include.sh
 
-REPO="https://repo3.unipi.technology/debian"
+REPO="https://repo.unipi.technology/debian"
 MODULES_PKG=unipi-kernel-modules
 LINUX_KERNEL_PKG=axon-kernel-image
 
