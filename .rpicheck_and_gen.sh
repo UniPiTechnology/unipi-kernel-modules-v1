@@ -4,8 +4,13 @@
 [ -r /ci-scripts/include.sh ] && . /ci-scripts/include.sh
 
 REPO="https://repo.unipi.technology/debian"
-MODULES_PKG=neuron-kernel
 LINUX_KERNEL_PKG=raspberrypi-kernel
+
+if [ "$DEBIAN_VERSION" = "stretch" ]; then
+  MODULES_PKG=neuron-kernel
+else
+  MODULES_PKG=unipi-kernel-modules
+fi
 
 ## find last generated kernel-module version in UniPi repo
 apt-get install -y apt-transport-https
