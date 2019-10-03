@@ -1,10 +1,3 @@
-variables:
-#    TEMPLATE_DISABLE: "1"
-    TEMPLATE_DEB_NAME: "unipi-kernel-modules"
-
-include: 
-    project: docker/template
-    file: debian-pkg.yaml
 
 ##############################################################
 # build on schedule or trigger 
