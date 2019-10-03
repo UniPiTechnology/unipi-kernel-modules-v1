@@ -4,6 +4,7 @@
 # check kernel versions and trigger to generate last tagged version
 
 check-master-schedule:
+    image: $CI_REGISTRY/docker/bob-the-builder/buster:latest
     tags: ['amd64']
     only:
         - triggers
