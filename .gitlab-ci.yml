@@ -88,6 +88,9 @@ build-oldstable-schedule:nano:
         - schedules
     script:
         - bash .axoncheck_and_gen.sh unipi-kernel-modules
+    variables:
+        VERSION_SUFFIX: ""
+
 
 build-oldstable-schedule:rpi:
     extends: .build_for_oldstable
@@ -97,6 +100,9 @@ build-oldstable-schedule:rpi:
         - schedules
     script:
         - bash .rpicheck_and_gen.sh unipi-kernel-modules
+    variables:
+        VERSION_SUFFIX: ""
+
 
 deploy-schedule:
     extends: .deploy_master
