@@ -86,10 +86,10 @@ echo ${TAG} "${DISABLE_STABLE_ARMHF}" "${DISABLE_OLDSTABLE_ARMHF}" "${DISABLE_ST
 
 if [ "${DISABLE_STABLE_ARMHF}${DISABLE_OLDSTABLE_ARMHF}${DISABLE_STABLE_ARM64}${DISABLE_OLDSTABLE_ARM64}" != "1111" ]; then
     curl --request POST --form token=${CI_TRIGGER_TOKEN} --form "ref=${TAG}" \
-         --form "variables[DISABLE_STABLE_ARMHF]=${DISABLE_STABLE_ARMHF}" \
-         --form "variables[DISABLE_STABLE_ARM64]=${DISABLE_STABLE_ARM64}" \
-         --form "variables[DISABLE_OLDSTABLE_ARMHF]=${DISABLE_OLDSTABLE_ARMHF}" \
-         --form "variables[DISABLE_OLDSTABLE_ARM64]=${DISABLE_OLDSTABLE_ARM64}" \
+         --form "variables[DISABLE_STABLE_ARMHF]=${DISABLE_STABLE_ARMHF:=0}" \
+         --form "variables[DISABLE_STABLE_ARM64]=${DISABLE_STABLE_ARM64:=0}" \
+         --form "variables[DISABLE_OLDSTABLE_ARMHF]=${DISABLE_OLDSTABLE_ARMHF:=0}" \
+         --form "variables[DISABLE_OLDSTABLE_ARM64]=${DISABLE_OLDSTABLE_ARM64:=0}" \
          https://git.unipi.technology/api/v4/projects/16/trigger/pipeline
 fi
 ## be carefull, this running script can be changed after checkout
