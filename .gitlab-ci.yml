@@ -10,7 +10,7 @@ check-master-schedule:
         - schedules
     before_script: 
         - apt-get update
-        - apt-get install -y axon-kernel-headers
+        - apt-get install -y curl
     script:
         - bash kernels_check.sh
 
