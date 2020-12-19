@@ -11,7 +11,7 @@ OLDSTABLE_CODENAME="stretch"
 function check_kernel ()
 {
   ## find last generated kernel-module version in UniPi repo
-  echo "deb [arch=${ARCH}] $REPO $DEBIAN_VERSION main" > /etc/apt/sources.list.d/unipi.list
+  echo "deb [arch=${ARCH}] $REPO $DEBIAN_VERSION main g1-main zulu-main" > /etc/apt/sources.list.d/unipi.list
   if [ ${ARCH} = "armhf" ]; then
     echo "deb [arch=${ARCH}] $RPI_REPO  $DEBIAN_VERSION main" > /etc/apt/sources.list.d/rpi.list
   fi
@@ -61,6 +61,19 @@ MODULES_PKG=unipi-kernel-modules
 ARCH=arm64
 check_kernel || DISABLE_OLDSTABLE_ARM64=1
 
+## check G1 on Buster
+LINUX_KERNEL_PKG=g1-kernel-image
+DEBIAN_VERSION=${STABLE_CODENAME}
+MODULES_PKG=unipi-kernel-modules
+ARCH=arm64
+check_kernel || DISABLE_STABLE_G1=1
+
+## check Zulu on Buster
+LINUX_KERNEL_PKG=zulu-kernel-image
+DEBIAN_VERSION=${STABLE_CODENAME}
+MODULES_PKG=unipi-kernel-modules
+ARCH=arm64
+check_kernel || DISABLE_STABLE_ZULU=1
 
 # create map commit->tag
 git show-ref --tags -d \
@@ -90,6 +103,8 @@ if [ "${DISABLE_STABLE_ARMHF}${DISABLE_OLDSTABLE_ARMHF}${DISABLE_STABLE_ARM64}${
          --form "variables[DISABLE_STABLE_ARM64]=${DISABLE_STABLE_ARM64:=0}" \
          --form "variables[DISABLE_OLDSTABLE_ARMHF]=${DISABLE_OLDSTABLE_ARMHF:=0}" \
          --form "variables[DISABLE_OLDSTABLE_ARM64]=${DISABLE_OLDSTABLE_ARM64:=0}" \
+         --form "variables[DISABLE_STABLE_G1]=${DISABLE_STABLE_G1:=0}" \
+         --form "variables[DISABLE_STABLE_ZULU]=${DISABLE_STABLE_ZULU:=0}" \
          https://git.unipi.technology/api/v4/projects/16/trigger/pipeline
 fi
 ## be carefull, this running script can be changed after checkout
