@@ -64,14 +64,14 @@ check_kernel || DISABLE_OLDSTABLE_ARM64=1
 ## check G1 on Buster
 LINUX_KERNEL_PKG=g1-kernel-image
 DEBIAN_VERSION=${STABLE_CODENAME}
-MODULES_PKG=unipi-kernel-modules
+MODULES_PKG=g1-unipi-kernel-modules
 ARCH=arm64
 check_kernel || DISABLE_STABLE_G1=1
 
 ## check Zulu on Buster
 LINUX_KERNEL_PKG=zulu-kernel-image
 DEBIAN_VERSION=${STABLE_CODENAME}
-MODULES_PKG=unipi-kernel-modules
+MODULES_PKG=zulu-unipi-kernel-modules
 ARCH=arm64
 check_kernel || DISABLE_STABLE_ZULU=1
 
