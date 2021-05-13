@@ -4,7 +4,7 @@ variables:
 
 include: 
     project: docker/template
-    file: debian-pkg.yaml
+    file: debian-pkg-ng.yaml
 
 ##############################################################
 ## set empty VERSION_SUFFIX; package names are concatenated with 
