@@ -662,7 +662,12 @@ static int copy_from_read_buf(struct tty_struct *tty,
  */
 
 static ssize_t unipi_tty_read(struct tty_struct *tty, struct file *file,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 			 unsigned char __user *buf, size_t nr)
+#else
+			 unsigned char *buf, size_t nr,
+			 void **cookie, unsigned long offset)
+#endif
 {
 	struct unipi_tty_data *ldata = tty->disc_data;
     struct tty_port *port = tty->port;
