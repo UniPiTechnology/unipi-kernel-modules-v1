@@ -677,7 +677,7 @@ read_rtc:
 	    rtc_nvmem_register(rtc_unipi->rtc, &nvmem_cfg);
 #else
 	    nvmem_cfg.priv = rtc_unipi;
-	    rtc_nvmem_register(rtc_unipi->rtc, &nvmem_cfg);
+	    devm_rtc_nvmem_register(rtc_unipi->rtc, &nvmem_cfg);
 #endif
 	rtc_unipi->rtc->ops = &mcp794xx_rtc_ops; /*chip->rtc_ops ?: &ds13xx_rtc_ops;*/
 	err = rtc_register_device(rtc_unipi->rtc);
