@@ -1044,14 +1044,26 @@ void __exit unipi_tty_exit(void)
 
 struct tty_ldisc_ops unipi_tty_ldisc;
 static void (*alias_n_tty_receive_buf)(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count);
+#else
+			      const char *fp, int count);
+#endif
 static int (*alias_n_tty_receive_buf2)(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count);
+#else
+			      const char *fp, int count);
+#endif
 static int (*alias_n_tty_ioctl)(struct tty_struct *tty, struct file *file,
                unsigned int cmd, unsigned long arg);
 
 static void unipi_tty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count)
+#else
+			      const char *fp, int count)
+#endif
 {
     int is_parmrk = I_PARMRK(tty);
     if (is_parmrk) {
@@ -1065,7 +1077,11 @@ static void unipi_tty_receive_buf(struct tty_struct *tty, const unsigned char *c
 }
 
 static int unipi_tty_receive_buf2(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count)
+#else
+			      const char *fp, int count)
+#endif
 {
     int ret;
     int is_parmrk = I_PARMRK(tty);
