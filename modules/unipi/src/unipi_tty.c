@@ -990,7 +990,9 @@ static long unipi_tty_compat_ioctl(struct tty_struct *tty, struct file *file,
 #endif
 
 static struct tty_ldisc_ops unipi_tty_ops = {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 13, 0)
 	.magic           = TTY_LDISC_MAGIC,
+#endif
   	.owner 			 = THIS_MODULE,
 	.name            = "unipi_tty",
 	.open            = unipi_tty_open,
@@ -1095,7 +1097,9 @@ int __init unipi_tty_init(void)
 
     memset(&unipi_tty_ldisc, 0, sizeof(unipi_tty_ldisc));
     n_tty_inherit_ops(&unipi_tty_ldisc);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 13, 0)
     unipi_tty_ldisc.magic           = TTY_LDISC_MAGIC;
+#endif
     unipi_tty_ldisc.name            = "unipi_tty";
     unipi_tty_ldisc.owner           = THIS_MODULE;
 
