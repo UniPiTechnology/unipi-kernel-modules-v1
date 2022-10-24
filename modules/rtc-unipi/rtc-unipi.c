@@ -680,7 +680,11 @@ read_rtc:
 	    devm_rtc_nvmem_register(rtc_unipi->rtc, &nvmem_cfg);
 #endif
 	rtc_unipi->rtc->ops = &mcp794xx_rtc_ops; /*chip->rtc_ops ?: &ds13xx_rtc_ops;*/
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
 	err = rtc_register_device(rtc_unipi->rtc);
+#else
+	err = devm_rtc_register_device(rtc_unipi->rtc);
+#endif
 	if (err)
 		return err;
 
