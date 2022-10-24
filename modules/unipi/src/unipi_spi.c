@@ -1243,7 +1243,7 @@ s32 neuronspi_spi_probe(struct spi_device *spi)
 	u32 always_create_uart = 0;
     struct kthread_worker   *worker;
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,9,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,9,0) && LINUX_VERSION_CODE < KERNEL_VERSION(5,14,0)
     struct spi_delay inactive_delay;
 #endif
 
@@ -1373,7 +1373,7 @@ s32 neuronspi_spi_probe(struct spi_device *spi)
     if (gpio_is_valid(spi->cs_gpio)) {
         spi->cs_gpio = -spi->cs_gpio;
     }
-#else
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(5,9,0) && LINUX_VERSION_CODE < KERNEL_VERSION(5,14,0)
     inactive_delay.value = 40;
     inactive_delay.unit = SPI_DELAY_UNIT_USECS;
 	spi_set_cs_timing(spi, NULL, NULL, &inactive_delay);
