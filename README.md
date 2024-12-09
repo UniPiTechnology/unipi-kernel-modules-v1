@@ -1,3 +1,7 @@
+This repository is no longer maintaned. Please see the repository of [Unipi kernel modules v2](https://github.com/UniPiTechnology/unipi-kernel-modules).
+
+
+___
 * Kernel modules required for UniPi Neuron/Axon PLC
 
 You need Linux kernel source to compile this modules.
