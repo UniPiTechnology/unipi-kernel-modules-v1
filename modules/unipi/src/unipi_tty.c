@@ -662,7 +662,12 @@ static int copy_from_read_buf(struct tty_struct *tty,
  */
 
 static ssize_t unipi_tty_read(struct tty_struct *tty, struct file *file,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 			 unsigned char __user *buf, size_t nr)
+#else
+			 unsigned char *buf, size_t nr,
+			 void **cookie, unsigned long offset)
+#endif
 {
 	struct unipi_tty_data *ldata = tty->disc_data;
     struct tty_port *port = tty->port;
@@ -985,7 +990,9 @@ static long unipi_tty_compat_ioctl(struct tty_struct *tty, struct file *file,
 #endif
 
 static struct tty_ldisc_ops unipi_tty_ops = {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 13, 0)
 	.magic           = TTY_LDISC_MAGIC,
+#endif
   	.owner 			 = THIS_MODULE,
 	.name            = "unipi_tty",
 	.open            = unipi_tty_open,
@@ -1012,7 +1019,11 @@ int __init unipi_tty_init(void)
 {
 	int err;
 	unipi_tty_trace(KERN_INFO "UNIPISPI: TTY Init\n");
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 	err = tty_register_ldisc(N_PROFIBUS_FDL, &unipi_tty_ops);
+#else
+	err = tty_register_ldisc(&unipi_tty_ops);
+#endif
 	if (err) {
 		printk(KERN_INFO "UNIPISPI: UniPi line discipline registration failed. (%d)", err);
 		return err;
@@ -1022,21 +1033,37 @@ int __init unipi_tty_init(void)
 
 void __exit unipi_tty_exit(void)
 {
-     tty_unregister_ldisc(N_PROFIBUS_FDL);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+    tty_unregister_ldisc(N_PROFIBUS_FDL);
+#else
+     tty_unregister_ldisc(&unipi_tty_ops);
+#endif
 }
 
 #else
 
 struct tty_ldisc_ops unipi_tty_ldisc;
 static void (*alias_n_tty_receive_buf)(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count);
+#else
+			      const char *fp, int count);
+#endif
 static int (*alias_n_tty_receive_buf2)(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count);
+#else
+			      const char *fp, int count);
+#endif
 static int (*alias_n_tty_ioctl)(struct tty_struct *tty, struct file *file,
                unsigned int cmd, unsigned long arg);
 
 static void unipi_tty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count)
+#else
+			      const char *fp, int count)
+#endif
 {
     int is_parmrk = I_PARMRK(tty);
     if (is_parmrk) {
@@ -1050,7 +1077,11 @@ static void unipi_tty_receive_buf(struct tty_struct *tty, const unsigned char *c
 }
 
 static int unipi_tty_receive_buf2(struct tty_struct *tty, const unsigned char *cp,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
 			      char *fp, int count)
+#else
+			      const char *fp, int count)
+#endif
 {
     int ret;
     int is_parmrk = I_PARMRK(tty);
@@ -1090,7 +1121,9 @@ int __init unipi_tty_init(void)
 
     memset(&unipi_tty_ldisc, 0, sizeof(unipi_tty_ldisc));
     n_tty_inherit_ops(&unipi_tty_ldisc);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 13, 0)
     unipi_tty_ldisc.magic           = TTY_LDISC_MAGIC;
+#endif
     unipi_tty_ldisc.name            = "unipi_tty";
     unipi_tty_ldisc.owner           = THIS_MODULE;
 
@@ -1102,7 +1135,12 @@ int __init unipi_tty_init(void)
 	unipi_tty_ldisc.receive_buf2	= unipi_tty_receive_buf2;
 	unipi_tty_ldisc.ioctl	        = unipi_tty_ioctl;
 
-    err = tty_register_ldisc(N_PROFIBUS_FDL, &unipi_tty_ldisc);
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+   err = tty_register_ldisc(N_PROFIBUS_FDL, &unipi_tty_ldisc);
+#else
+    err = tty_register_ldisc(&unipi_tty_ldisc);
+#endif
     if (err) {
         printk(KERN_INFO "UniPi line discipline registration failed. (%d)", err);
         return err;
@@ -1112,6 +1150,10 @@ int __init unipi_tty_init(void)
 
 void __exit unipi_tty_exit(void)
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
      tty_unregister_ldisc(N_PROFIBUS_FDL);
+#else
+     tty_unregister_ldisc(&unipi_tty_ldisc);
+#endif
 }
 #endif
